@@ -8,10 +8,19 @@ import (
 )
 
 type Config struct {
-	Env         string        `yaml:"env" env-default:"local"`
-	StoragePath string        `yaml:"storage_path" env-required:"true"`
-	TokenTTL    time.Duration `yaml:"token_ttl" env-required:"true"`
-	GRPC        GRPCConfig    `yaml:"grpc"`
+	Env      string        `yaml:"env" env-default:"local"`
+	TokenTTL time.Duration `yaml:"token_ttl" env-required:"true"`
+	GRPC     GRPCConfig    `yaml:"grpc"`
+	DB       DBConfig      `yaml:"database"`
+}
+
+type DBConfig struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	DBName   string
+	SSLMode  string
 }
 
 type GRPCConfig struct {
@@ -46,7 +55,7 @@ func fetchConfigPath() string {
 	flag.Parse()
 
 	if res == "" {
-		res = os.Getenv("CONFIG_PATH")
+		res = ""
 	}
 
 	return res

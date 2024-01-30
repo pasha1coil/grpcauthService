@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"authgrpc/internal/config"
 	"authgrpc/internal/domain/models"
 	"authgrpc/internal/storage"
 	"context"
@@ -12,10 +13,13 @@ type Storage struct {
 	conn *pgx.Conn
 }
 
-func New(connectionString string) (*Storage, error) {
+func New(dbConfig config.DBConfig) (*Storage, error) {
 	const op = "storage.postgres.New"
 
-	conn, err := pgx.Connect(context.Background(), connectionString)
+	connString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Password, dbConfig.DBName, dbConfig.SSLMode)
+
+	conn, err := pgx.Connect(context.Background(), connString)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}

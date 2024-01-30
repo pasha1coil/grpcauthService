@@ -2,6 +2,7 @@ package app
 
 import (
 	"authgrpc/internal/app/grpcapp"
+	"authgrpc/internal/config"
 	"authgrpc/internal/services/auth"
 	"authgrpc/internal/storage/postgres"
 	"log/slog"
@@ -15,10 +16,10 @@ type App struct {
 func New(
 	log *slog.Logger,
 	grpcPort int,
-	storagePath string,
+	db config.DBConfig,
 	tokenTTL time.Duration,
 ) *App {
-	storage, err := postgres.New(storagePath)
+	storage, err := postgres.New(db)
 	if err != nil {
 		panic(err)
 	}

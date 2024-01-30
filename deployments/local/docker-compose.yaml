@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: auth_pg
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: pasha
+      POSTGRES_PASSWORD: elena123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
