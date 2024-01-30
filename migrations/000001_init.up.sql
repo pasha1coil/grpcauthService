@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users
 (
     id         SERIAL PRIMARY KEY,
-    phone      TEXT UNIQUE,
+    phone      TEXT NOT NULL UNIQUE,
     email      TEXT NOT NULL UNIQUE,
     pass_hash  TEXT NOT NULL,
     is_admin   BOOLEAN NOT NULL DEFAULT FALSE
