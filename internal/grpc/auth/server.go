@@ -11,8 +11,7 @@ import (
 type Auth interface {
 	Login(ctx context.Context, email string,
 		password string, appID int) (token string, err error)
-	RegisterNewUser(ctx context.Context, email string,
-		password string) (userID int64, err error)
+	RegisterNewUser(ctx context.Context, email string, phone string, password string) (userID int64, err error)
 	IsAdmin(ctx context.Context, userID int64) (bool, error)
 }
 
@@ -58,10 +57,15 @@ func (s *serverApi) Register(ctx context.Context, req *auth1.RegisterRequest) (*
 	}
 
 	if req.GetPassword() == "" {
+
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
 
-	userID, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword())
+	if req.GetPhone() == "" {
+		return nil, status.Error(codes.InvalidArgument, "phone is required")
+	}
+
+	userID, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword(), req.GetPhone())
 	if err != nil {
 		return nil, status.Error(codes.Internal, "internal error")
 	}
